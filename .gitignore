@@ -146,7 +146,7 @@ launch.json
 .idea/
 
 # data files
-data*/
+data/
 *.csv
 *.db
 *.parquet
