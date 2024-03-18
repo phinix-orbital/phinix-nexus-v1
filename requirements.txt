@@ -1,0 +1,6 @@
+pandas
+sqlalchemy
+pydantic
+pyyaml
+pytest
+db-dtypes

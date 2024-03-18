@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools", "pip", "setuptools-scm",]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phinix-data-operations"
+authors = [
+    {name = "Sandhan Borgohain", email = "sandhan.borgohain@phinix.fr"}
+]
+dynamic = ["dependencies"]
+version = "1.0.0"
+
+[tool.setuptools]
+include-package-data = true
+package-dir = {"" = "src"}
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+#automatically find packages
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
