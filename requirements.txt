@@ -1,6 +1,9 @@
-pandas
-sqlalchemy
-pydantic
-pyyaml
-pytest
-db-dtypes
+pandas==2.2.1
+numpy==1.26.4
+sqlalchemy==2.0.28
+pydantic==2.6.0
+great-expectations==0.18.11
+pyyaml==5.4.1
+pytest==8.1.1
+pytest-cov==4.1.0
+db-dtypes==1.2.0
