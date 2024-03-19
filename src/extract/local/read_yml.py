@@ -9,7 +9,7 @@ class ReadYml(ReadData):
             self,
             file_path: str,
     ) -> None:
-        super().__init__(file_path)
+        super().__init__(file_path=file_path)
     
     def read_file(self):
         return FileLoader.load_yaml_to_dict(self.file_path)

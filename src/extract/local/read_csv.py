@@ -10,7 +10,7 @@ class ReadCsv(ReadData):
             self,
             file_path: str,
     ) -> None:
-        super().__init__(file_path)
+        super().__init__(file_path=file_path)
     
     def read_file(self, **kwargs):
         return FileLoader.load_df_from_csv(self.file_path, **kwargs)
