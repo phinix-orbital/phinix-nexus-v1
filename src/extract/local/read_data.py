@@ -1,8 +1,5 @@
-import logging
 from abc import ABC, abstractmethod
 from validators.run_validator import RunValidator
-
-logger = logging.getLogger(__name__)
 
 class ReadData(ABC):
     """

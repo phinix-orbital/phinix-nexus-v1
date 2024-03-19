@@ -5,3 +5,11 @@ LOCAL_FILE_PATH_SUFFFIX_LIST = [
     "xlsx",
     "txt",
 ]
+
+PANDAS_FILTERS = [
+    "EQUALS",
+    "GREATER THAN",
+    "LESS THAN",
+    "STRING CONTAINS",
+    "MATCH IN LIST"
+]
