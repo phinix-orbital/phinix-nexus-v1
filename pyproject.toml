@@ -3,7 +3,7 @@ requires = ["setuptools", "pip", "setuptools-scm",]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "phinix-data-operations"
+name = "phinix-nexus-engine"
 authors = [
     {name = "Sandhan Borgohain", email = "sandhan.borgohain@phinix.fr"}
 ]
