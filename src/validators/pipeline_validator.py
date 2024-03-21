@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator, root_validator
+from pydantic import BaseModel, field_validator, model_validator
 from stock.variables import PANDAS_FILTERS
 
 class ValidateConvertKeyToPandasFilter(BaseModel):
@@ -13,7 +13,7 @@ class ValidateConvertKeyToPandasFilter(BaseModel):
         if value.lower() not in [i.lower() for i in PANDAS_FILTERS]:
             raise ValueError(f"{value} not in implemented list of pandas filters!")
     
-    @root_validator()
+    @model_validator(mode="after")
     def validate_fields_combination(
         cls,
         field_values: dict,
