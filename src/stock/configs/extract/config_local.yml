@@ -1,1 +1,2 @@
 requirements: data/requirements.csv
+parameter_connections: data/parameter_connections.xlsx

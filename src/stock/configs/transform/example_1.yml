@@ -1,0 +1,76 @@
+STEP_1:
+  rename_df:
+    souce_PARXXXXX_id : source_parxxxxx_id
+    target_PARXXXXX_id : target_parxxxxx_id
+
+STEP_2:
+  fill_na:
+    all_cols:
+      set_value: 0.
+      apply_func: mean
+    subset:
+      set_value:
+        1.5:
+          - source_parxxxxx_id
+        not_found:
+          - target_parxxxxx_id
+      apply_func:
+        sum:
+          - dummy_col
+
+STEP_3:
+  filter_df:
+    equals:
+      source_parxxxxx_id:
+        value: 'PAR00001'
+        id: A
+    string contains:
+      target_parxxxxx_id:
+        value: 'PAR|10'
+        id: B
+    filter_combination: "1 and ~2"
+
+STEP_4:
+  groupby:
+    groupby_cols:
+      - source_parxxxxx_id
+      - target_parxxxxx_id
+    agg_transform:
+      dummy_col: mean
+
+STEP_5:
+  arithmetic:
+    div: [[dummy_col, dummy_col_1], [dummy_col, dummy_col_2]] # list of new cols to add ([num, den], ...) -> df has 2 new cols called dummy_col_div_dummy_col_1 and dummy_col_div_dummy_col_2
+    add:  [[dummy_col, dummy_col_1], [dummy_col, dummy_col_2]] # list of new cols to add ([num, den], ...) -> df has 2 new cols called dummy_col_add_dummy_col_1 and dummy_col_add_dummy_col_2
+    idx: [[dummy_col, dummy_col_1, to]] -> # [[base, value, subtraction direction]]; to: (val-base)/base, from: (base-val)/base
+  
+STEP_6:
+  select_cols:
+    list_cols:
+     - source_parxxxxx_id
+     - target_parxxxxx_id
+     - dummy_col_1
+     - dummy_col_div_dummy_col_2
+     - dummy_col_add_dummy_col_1
+
+STEP_7:
+  drop_duplicates:
+    ignore_index: true
+
+STEP_8:
+  drop_records:
+    columns:
+      - dummy_col_1
+
+STEP_9:
+  pivot_cols:
+    index:
+      - source_parxxxxx_id
+    columns:
+      - target_parxxxxx_id
+    values: dummy_col_div_dummy_col_2
+    unstack: true
+
+STEP_10:
+  reset_index:
+    drop: true
