@@ -1,0 +1,14 @@
+STEP_1:
+  input:
+    type: read_local
+    target: parameter_connections
+
+STEP_2:
+  input:
+    type: read_local
+    target: parameter_connections_schema
+
+STEP_3:
+  data_validation:
+    calibrate: step_1
+    schema: step_2

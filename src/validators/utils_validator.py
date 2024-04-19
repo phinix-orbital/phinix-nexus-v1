@@ -80,9 +80,9 @@ class ValidateGroupbyAndAgg(BaseModel):
         if len(_col_list)<len(df.columns):
             logger.warning("Groupby agg columns are a subset of dataframe columns. Some columns will be dropped!")
     
-    @model_validator(mode="after")
-    def validate_agg_cols_are_numeric(
-        cls,
-        field_values: dict,
-    ) -> None:
-        pass
+    # @model_validator(mode="after")
+    # def validate_agg_cols_are_numeric(
+    #     cls,
+    #     field_values: dict,
+    # ) -> None:
+    #     pass
