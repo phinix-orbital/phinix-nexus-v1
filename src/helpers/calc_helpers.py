@@ -1,11 +1,11 @@
-import logging
 import pandas as pd
 
-logger = logging.getLogger(__name__)
+from validators.run_validator import RunValidator
 
 class CalculationHelpers:
 
     @classmethod
+    @RunValidator.validate_class_method(check="calculate_index")
     def calculate_index(
         base: str | int | float,
         value: str | int | float,
@@ -20,9 +20,6 @@ class CalculationHelpers:
                 df[new_col_name] = (df[base] - df[value])/df[base]
             return df
         else:
-            if base == 0.:
-                logger.error("Cannot divide by 0!")
-                raise ZeroDivisionError
             if movement_base == "to":
                 return (value - base)/base
             else:

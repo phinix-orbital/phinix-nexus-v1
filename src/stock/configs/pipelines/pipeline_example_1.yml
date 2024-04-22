@@ -1,0 +1,7 @@
+STEP_1:
+  component:
+    name: template_v1
+
+STEP_2:
+  component:
+    name: template_v2

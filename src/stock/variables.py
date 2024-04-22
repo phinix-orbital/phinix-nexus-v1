@@ -6,6 +6,12 @@ LOCAL_FILE_PATH_SUFFFIX_LIST = [
     "txt",
 ]
 
+CONFIG_TYPES = [
+    "component",
+    "extract",
+    "pipeline",
+]
+
 PANDAS_FILTERS = [
     "equals",
     "greater than",

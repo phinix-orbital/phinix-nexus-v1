@@ -9,10 +9,10 @@ class ValidateInputData:
     @RunValidator.validate_instance_method(check="input_data_validator")
     def __init__(
             self,
-            df_calibrate: pd.DataFrame,
+            calibrate: pd.DataFrame,
             schema: pd.DataFrame | dict,
     ) -> None:
-        self.df_calibrate = df_calibrate
+        self.df_calibrate = calibrate
         self.schema = schema
     
     def _get_schema_dict(self):
