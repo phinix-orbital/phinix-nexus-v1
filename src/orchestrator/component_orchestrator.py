@@ -21,7 +21,7 @@ class ComponentOrchestrator:
                                 del _op_params["in_feed"]
                         else:
                             raise ValueError(f"Target step {i} in {_step} has not been defined in a previous step!")
-                _op_run = _op_func(**_op_params)
-                _step_outputs[_step.lower()] = _op_run
-                _result = _op_run
+            _op_run = _op_func(**_op_params)
+            _step_outputs[_step.lower()] = _op_run
+            _result = _op_run
         return _result

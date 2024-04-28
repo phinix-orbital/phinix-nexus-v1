@@ -1,5 +1,5 @@
 from mappers.abstract_mappers import AbstractMappersFactory
-from validators import extract_validator, helpers_validator, utils_validator, operations_validators, misc_validator
+from validators import extract_validator, helpers_validator, utils_validator, operations_validators, misc_validator, load_validator
 
 class ValidatorsMapperFactory(AbstractMappersFactory):
     @classmethod
@@ -9,6 +9,9 @@ class ValidatorsMapperFactory(AbstractMappersFactory):
             "load_yaml_to_dict": extract_validator.ValidateLoadYamlToDict,
             "load_df_from_csv": extract_validator.ValidateLoadDfFromCsv,
             "load_df_from_excel": extract_validator.ValidateLoadDfFromExcel,
+            "write_dataframe": load_validator.ValidateWriteDataframe,
+            "write_string": load_validator.ValidateWriteString,
+            "save_pipeline_step_output": load_validator.ValidateSavePipelineStepOutput,
             "run_ge_validation": helpers_validator.ValidateRunGeValidation,
             "calculate_index": helpers_validator.ValidateCalculateIndex,
             "order_config_steps": helpers_validator.ValidateOrderConfigSteps,
