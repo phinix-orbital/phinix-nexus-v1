@@ -39,3 +39,8 @@ COMPONENT_OPERATION_INPUT_TYPES = [
     "read_local",
     "basic",
 ]
+
+DATAFRAMES_INTERACTION_TYPES = [
+    "merge",
+    "concat"
+]

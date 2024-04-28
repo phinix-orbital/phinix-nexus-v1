@@ -1,6 +1,13 @@
+import great_expectations as ge
+import os
 import pandas as pd
+from typing import Self
 
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, field_validator, model_validator, ValidationError
+
+from helpers.generic_helpers import GenericHelpers
+from stock.variables import DATAFRAMES_INTERACTION_TYPES
+from validators.extract_validator import ValidateLocalFilePath
 
 class ValidateRunInput(BaseModel):
 
@@ -17,3 +24,77 @@ class ValidateRunDataValidation(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+class ValidateRunComponent(BaseModel):
+
+    comp_name: str
+
+    @field_validator("comp_name")
+    def check_component_existence(cls, value: str) -> None:
+        _file_ext = os.path.splitext(value)[1]
+        _file_ext = _file_ext[1:]
+        if len(_file_ext) == 0:
+            value += value + ".yml"
+        else:
+            if _file_ext not in ["yml", "yaml"]:
+                raise ValidationError(f"Component file type must be Yaml!")
+        _file_path = os.path.join(GenericHelpers.get_configs_path(), "components", f"{value}")
+        _ = ValidateLocalFilePath(file_path=_file_path)
+
+class ValidateRunDataframesInteraction(BaseModel):
+    interaction_config: dict
+    
+    @field_validator("interaction_config")
+    def validate_config(cls, value: dict):       
+        if "type" not in value.keys() or "parameters" not in value.keys():
+            raise ValidationError("Dataframe interaction config must contain 'type' and 'parameters' in keys!")
+        _int_type = value.get("type")
+        if _int_type not in DATAFRAMES_INTERACTION_TYPES:
+            raise ValidationError(f"{_int_type} is not an accepted dataframe interaction type! Accepted types are {', '.join(DATAFRAMES_INTERACTION_TYPES)}")
+        _int_params: dict = value.get("parameters")
+        if not isinstance(_int_params, dict):
+            raise ValidationError("Dataframe interaction params must be a dictionary!")
+        df1 = ge.from_pandas(_int_params.get("left_df"))
+        df2 = ge.from_pandas(_int_params.get("right_df"))
+        if _int_type == "merge":
+            _params = ["left_df", "right_df", "join_type", "join_cols"]
+            if not set(_params).issubset(set(list(_int_params.keys()))):
+                raise ValidationError(f" {_int_type} dataframe interaction params dict must contain keys: {', '.join(_params)}")
+            if isinstance(_int_params.get("join_cols"), str):
+                _join_cols = [_int_params.get("join_cols")]
+            elif isinstance(_int_params.get("join_cols"), list):
+                _join_cols = _int_params.get("join_cols")
+            else:
+                raise ValidationError("Dataframe interaction parameter 'join_cols' must be of type str or list!")
+            for _col in _join_cols:
+                GenericHelpers.run_ge_validation(dict(**df1.expect_column_to_exist(_col)))
+                GenericHelpers.run_ge_validation(dict(**df2.expect_column_to_exist(_col)))
+        elif _int_type == "concat":
+            _params = ["list_dfs"]
+            if not set(_params).issubset(set(list(_int_params.keys()))):
+                raise ValidationError(f" {_int_type} dataframe interaction params dict must contain keys: {', '.join(_params)}")
+            if not isinstance(_int_params.get("list_dfs"), list):
+                raise ValidationError("list_dfs parameter value must be of type list!")
+            if len(_int_params.get("list_dfs"))<2:
+                raise ValidationError("list_dfs must contain at least 2 dataframes!")
+            if "concat_axis" in _int_params.keys():
+                if _int_params.get("concat_axis") not in [0,1]:
+                    raise ValidationError("concat_axis only accepts 0 or 1!")
+                if _int_params.get("concat_axis") == 0:
+                    _cols = []
+                    for df in _int_params.get("list_dfs"):
+                        _cols.append(list(df.columns))
+                    if not GenericHelpers.check_if_all_list_elements_same(check_list=_cols):
+                        raise ValidationError("All dataframes must have the same columns and same column order for concat_axis = 0!")
+                else:
+                    _len_dfs = []
+                    for df in _int_params.get("list_dfs"):
+                        _len_dfs.append(len(df))
+                        if not GenericHelpers.check_if_all_list_elements_same(check_list=_len_dfs):
+                            raise ValidationError("All dataframes must have the same length for concat_axis = 1!")
+            else:
+                _cols = []
+                for df in _int_params.get("list_dfs"):
+                    _cols.append(list(df.columns))
+                if not GenericHelpers.check_if_all_list_elements_same(check_list=_cols):
+                    raise ValidationError("All dataframes must have the same columns and same column order if concat_axis is not set!")

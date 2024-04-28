@@ -18,6 +18,8 @@ class ValidatorsMapperFactory(AbstractMappersFactory):
             "groupby_and_agg": utils_validator.ValidateGroupbyAndAgg,
             "run_input": operations_validators.ValidateRunInput,
             "run_data_validation": operations_validators.ValidateRunDataValidation,
+            "run_component": operations_validators.ValidateRunComponent,
+            "run_dataframes_interaction": operations_validators.ValidateRunDataframesInteraction,
             "input_data_validator": misc_validator.ValidateInputDataValidator,
             "config_orchestrator": misc_validator.ValidateConfigOrchestrator,
         }

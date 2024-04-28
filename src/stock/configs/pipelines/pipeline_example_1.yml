@@ -5,3 +5,16 @@ STEP_1:
 STEP_2:
   component:
     name: template_v2
+
+STEP_3:
+  dataframes_interaction:
+    type: merge
+    parameters:
+      left_df: step_1
+      right_df: step_2
+      join_type: inner
+      join_cols:
+        - id1
+        - id2
+  save_step:
+    save_name: abc.csv

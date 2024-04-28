@@ -17,8 +17,9 @@ class ValidateLocalFilePath(BaseModel):
         _file_ext = _file_ext[1:]
         if len(_file_ext) == 0:
             raise ValidationError(f"File path passed does not have an extension!")
-        if _file_ext not in LOCAL_FILE_PATH_SUFFFIX_LIST:
-            raise ValidationError(f"Local file to be read must end with one of {', '.join(LOCAL_FILE_PATH_SUFFFIX_LIST)}!")
+        else:
+            if _file_ext not in LOCAL_FILE_PATH_SUFFFIX_LIST:
+                raise ValidationError(f"Local file to be read must end with one of {', '.join(LOCAL_FILE_PATH_SUFFFIX_LIST)}!")
         _file_read_indicator = False
         try:
             f = open(value, "rb")
