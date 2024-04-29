@@ -7,7 +7,6 @@ from orchestrator.config_orchestrator import ConfigOrchestrator
 from orchestrator.component_orchestrator import ComponentOrchestrator
 from utils.file_loader import FileLoader
 from validators.run_validator import RunValidator
-from validators.data_validators.input_data_validator import ValidateInputData
 
 class PipelineOperations:
 
@@ -18,14 +17,13 @@ class PipelineOperations:
         _file_ext = _file_ext[1:]
         if len(_file_ext) == 0:
             comp_name += comp_name + ".yml"
-            _file_ext = "yml"
         _cfg_fp = os.path.join(GenericHelpers.get_configs_path(), "components", f"{comp_name}")
         _cfg = FileLoader.read_local_file(file_path = _cfg_fp)
         _cfg_orc = ConfigOrchestrator(config=_cfg, config_type="component").orchestrate_config()
         return ComponentOrchestrator(config=_cfg_orc).run_component_steps()
 
     @classmethod
-    @RunValidator.validate_class_method(check="run_component")
+    @RunValidator.validate_class_method(check="run_dataframes_interaction")
     def run_dataframes_interaction(
         cls,
         interaction_config: dict,

@@ -13,9 +13,11 @@ class ValidateWriteString(BaseModel):
     output: str
 
 class ValidateSavePipelineStepOutput(BaseModel):
+    pipeline_name: str
     op_name: str
     save_name: str
     output: pd.DataFrame | str
+    save_file_path: str | None = None
 
     class Config:
         arbitrary_types_allowed = True

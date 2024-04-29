@@ -8,7 +8,6 @@ LOCAL_FILE_PATH_SUFFFIX_LIST = [
 
 CONFIG_TYPES = [
     "component",
-    "extract",
     "pipeline",
 ]
 
@@ -38,6 +37,11 @@ COMPONENT_OPERATIONS = [
 COMPONENT_OPERATION_INPUT_TYPES = [
     "read_local",
     "basic",
+]
+
+PIPELINE_OPERATIONS = [
+    "component",
+    "dataframes_interaction",
 ]
 
 DATAFRAMES_INTERACTION_TYPES = [

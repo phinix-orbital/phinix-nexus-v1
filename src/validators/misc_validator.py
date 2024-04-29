@@ -5,7 +5,7 @@ from typing import Self
 from pydantic import BaseModel, field_validator, model_validator, ValidationError
 
 from helpers.generic_helpers import GenericHelpers
-from stock.variables import CONFIG_TYPES, COMPONENT_OPERATIONS
+from stock.variables import CONFIG_TYPES, COMPONENT_OPERATIONS, PIPELINE_OPERATIONS
 
 class ValidateInputDataValidator(BaseModel):
     calibrate: pd.DataFrame
@@ -59,6 +59,11 @@ class ValidateConfigOrchestrator(BaseModel):
                     raise ValueError(f"Component operation {k} not in registered list! Accepted operations are: {', '.join(COMPONENT_OPERATIONS)}")
                 if not isinstance(v, dict):
                     raise ValueError("Component operation must be defined as a dict!")
+            elif self.config_type == "pipeline":
+                if k.lower() not in PIPELINE_OPERATIONS:
+                    raise ValueError(f"Pipeline operation {k} not in registered list! Accepted operations are: {', '.join(COMPONENT_OPERATIONS)}")
+                if not isinstance(v, dict):
+                    raise ValueError("Pipeline operation must be defined as a dict!")
  
     @model_validator(mode="after")
     def validate_config(self) -> Self:

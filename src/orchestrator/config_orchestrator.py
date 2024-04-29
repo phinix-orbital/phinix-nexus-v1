@@ -1,5 +1,4 @@
 from helpers.orchestrator_helpers import OrchestratorHelpers
-from stock.variables import COMPONENT_OPERATIONS
 from validators.run_validator import RunValidator
 
 class ConfigOrchestrator:
@@ -13,9 +12,11 @@ class ConfigOrchestrator:
         self.config = config
         self.config_type = config_type
     
-    def orchestrate_component_config(self):
-        return OrchestratorHelpers.order_config_steps(config=self.config)
+    # def orchestrate_component_config(self):
+    #     return OrchestratorHelpers.order_config_steps(config=self.config)
+    
+    # def orchestrate_pipeline_config(self):
+    #     pass
 
-    def orchestrate_config(self):
-        if self.config_type == "component":
-            return self.orchestrate_component_config()
+    def orchestrate_config(self) -> dict:
+        return OrchestratorHelpers.order_config_steps(config=self.config)
