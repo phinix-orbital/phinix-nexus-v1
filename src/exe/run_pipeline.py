@@ -8,7 +8,6 @@ from helpers.orchestrator_helpers import OrchestratorHelpers
 from orchestrator.config_orchestrator import ConfigOrchestrator
 from orchestrator.pipeline_orchestrator import PipelineOrchestrator
 from utils.file_loader import FileLoader
-from validators.run_validator import RunValidator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -16,10 +15,9 @@ logger = logging.getLogger(__name__)
 class RunPipeline:
 
     @classmethod
-    @RunValidator.validate_class_method(check="check_file_path_existence")
     def run_pipeline(cls, pipeline_path: str):
         _cfg: dict = FileLoader.read_local_file(file_path = pipeline_path)
-        _pipeline_name = Path("pipeline_path").stem
+        _pipeline_name = Path(pipeline_path).stem
         _cfg_orc = ConfigOrchestrator(config=_cfg, config_type="pipeline").orchestrate_config()
         _pipeline_result: dict =  PipelineOrchestrator(config=_cfg_orc, pipeline_name=_pipeline_name).run_pipeline_steps()
         if isinstance(_pipeline_result.get("output"), pd.DataFrame):
@@ -40,7 +38,7 @@ if __name__ == "__main__":
     _file_ext = os.path.splitext(_pipeline_name)[1]
     _file_ext = _file_ext[1:]
     if len(_file_ext) == 0:
-        _pipeline_name += _pipeline_name + ".yml"
-    _pipeline_path = os.path.join(GenericHelpers.get_configs_path(), _pipeline_name)    
+        _pipeline_name += ".yml"
+    _pipeline_path = os.path.join(GenericHelpers.get_configs_path(), "pipelines", _pipeline_name)
     RunPipeline.run_pipeline(pipeline_path=_pipeline_path)
     logger.info(f"--- Pipeline run successfully! ---")

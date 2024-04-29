@@ -1,5 +1,11 @@
+import logging
+import pandas as pd
+
 from load.write_data import WriteData
 from validators.run_validator import RunValidator
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class WriteString(WriteData):
     """
@@ -19,3 +25,4 @@ class WriteString(WriteData):
     ) -> None:
         with open(self.file_path, "wb") as f:
             f.write(output)
+        logger.info(f"File saved successfully at path: {self.file_path}")

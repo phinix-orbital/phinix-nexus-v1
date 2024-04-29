@@ -1,6 +1,6 @@
 import pandas as pd
 
-from pydantic import BaseModel, field_validator, model_validator, ValidationError
+from pydantic import BaseModel, field_validator, model_validator
 
 from stock.variables import COMPONENT_OPERATIONS
 
@@ -13,7 +13,7 @@ class ValidateRunGeValidation(BaseModel):
         value: dict,
     ) -> None:
         if "success" not in value.keys():
-            raise ValidationError("'success' not in passed dictionary keys!")
+            raise ValueError("'success' not in passed dictionary keys!")
 
 class ValidateCalculateIndex(BaseModel):
     base: str | int | float
@@ -28,7 +28,7 @@ class ValidateCalculateIndex(BaseModel):
     @field_validator("movement_base")
     def check_movement_base_value(cls, value: str):
         if value.lower() not in ["from", "to"]:
-            raise ValidationError("movement_base can only be set as 'from' or 'to'!")
+            raise ValueError("movement_base can only be set as 'from' or 'to'!")
     
     @model_validator(mode="after")
     def validate_non_zero_base(
@@ -49,4 +49,4 @@ class ValidateCheckIfAllListElementsSame(BaseModel):
     @field_validator("check_list")
     def check_list_length(cls, value: list):
         if len(value)<2:
-            raise ValidationError("Length of passed list to check has to be greater or equal to 2!")
+            raise ValueError("Length of passed list to check has to be greater or equal to 2!")

@@ -2,7 +2,7 @@ import great_expectations as ge
 import pandas as pd
 from typing import Self
 
-from pydantic import BaseModel, field_validator, model_validator, ValidationError
+from pydantic import BaseModel, field_validator, model_validator
 
 from helpers.generic_helpers import GenericHelpers
 from stock.variables import CONFIG_TYPES, COMPONENT_OPERATIONS, PIPELINE_OPERATIONS
@@ -21,7 +21,7 @@ class ValidateInputDataValidator(BaseModel):
     ) -> None:
         if isinstance(value, dict):
             if sorted(list(value.keys()))!=["column_name", "column_type"]:
-                raise ValidationError("Schema dict must contain keys exclusively from ['column_name', 'column_type']")
+                raise ValueError("Schema dict must contain keys exclusively from ['column_name', 'column_type']")
         else:
             _schema_data = ge.from_pandas(value)
             for _col in ["column_name", "column_type"]:
@@ -61,7 +61,7 @@ class ValidateConfigOrchestrator(BaseModel):
                     raise ValueError("Component operation must be defined as a dict!")
             elif self.config_type == "pipeline":
                 if k.lower() not in PIPELINE_OPERATIONS:
-                    raise ValueError(f"Pipeline operation {k} not in registered list! Accepted operations are: {', '.join(COMPONENT_OPERATIONS)}")
+                    raise ValueError(f"Pipeline operation {k} not in registered list! Accepted operations are: {', '.join(PIPELINE_OPERATIONS)}")
                 if not isinstance(v, dict):
                     raise ValueError("Pipeline operation must be defined as a dict!")
  
@@ -70,7 +70,7 @@ class ValidateConfigOrchestrator(BaseModel):
         _cfg: dict = self.config
         _cfg_type: str = self.config_type
         if _cfg_type not in CONFIG_TYPES:
-            raise ValidationError(f"config_type has to be one of {', '.join(CONFIG_TYPES)}")
+            raise ValueError(f"config_type has to be one of {', '.join(CONFIG_TYPES)}")
         _step_numbers = []
         for k in _cfg.keys():
             self.check_if_config_item_is_step(config_item=k)

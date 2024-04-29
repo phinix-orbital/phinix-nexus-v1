@@ -16,7 +16,7 @@ class PipelineOperations:
         _file_ext = os.path.splitext(comp_name)[1]
         _file_ext = _file_ext[1:]
         if len(_file_ext) == 0:
-            comp_name += comp_name + ".yml"
+            comp_name += ".yml"
         _cfg_fp = os.path.join(GenericHelpers.get_configs_path(), "components", f"{comp_name}")
         _cfg = FileLoader.read_local_file(file_path = _cfg_fp)
         _cfg_orc = ConfigOrchestrator(config=_cfg, config_type="component").orchestrate_config()

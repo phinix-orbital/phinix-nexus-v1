@@ -1,5 +1,5 @@
 import pandas as pd
-from pydantic import BaseModel, field_validator, ValidationError
+from pydantic import BaseModel
 
 class ValidateWriteDataframe(BaseModel):
 

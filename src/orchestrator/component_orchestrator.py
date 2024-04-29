@@ -1,4 +1,9 @@
+import logging
+
 from mappers.component_ops_mappers import ComponentMappersFactory
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ComponentOrchestrator:
 
@@ -11,6 +16,7 @@ class ComponentOrchestrator:
     def run_component_steps(self):
         _step_outputs = dict()
         for _step, _op_cfg in self.config.items():
+            logger.info(f"--- Running component {_step}... ---")
             for _op_name, _op_params in _op_cfg.items():
                 _op_func = ComponentMappersFactory.get_mapper_classes().get(_op_name)
                 for i in ["calibrate", "schema", "in_feed"]:

@@ -1,6 +1,6 @@
 import os
 import logging
-from pydantic import BaseModel, field_validator, ValidationError
+from pydantic import BaseModel, field_validator
 from stock.variables import LOCAL_FILE_PATH_SUFFFIX_LIST
 
 logger = logging.getLogger(__name__)
@@ -16,10 +16,10 @@ class ValidateLocalFilePath(BaseModel):
         _file_ext = os.path.splitext(value)[1]
         _file_ext = _file_ext[1:]
         if len(_file_ext) == 0:
-            raise ValidationError(f"File path passed does not have an extension!")
+            raise ValueError(f"File path passed does not have an extension!")
         else:
             if _file_ext not in LOCAL_FILE_PATH_SUFFFIX_LIST:
-                raise ValidationError(f"Local file to be read must end with one of {', '.join(LOCAL_FILE_PATH_SUFFFIX_LIST)}!")
+                raise ValueError(f"Local file to be read must end with one of {', '.join(LOCAL_FILE_PATH_SUFFFIX_LIST)}!")
         _file_read_indicator = False
         try:
             f = open(value, "rb")
@@ -42,7 +42,7 @@ class ValidateLoadYamlToDict(BaseModel):
         _file_ext = os.path.splitext(value)[1]
         _file_ext = _file_ext[1:]
         if _file_ext not in ["yml", "yaml"]:
-            raise ValidationError(f"Local file to be read must have extension .yml or .yaml!")
+            raise ValueError(f"Local file to be read must have extension .yml or .yaml!")
 
 class ValidateLoadDfFromCsv(BaseModel):
     file_path: str
@@ -55,7 +55,7 @@ class ValidateLoadDfFromCsv(BaseModel):
         _file_ext = os.path.splitext(value)[1]
         _file_ext = _file_ext[1:]
         if _file_ext != "csv":
-            raise ValidationError(f"Local file to be read must have extension .yml or .yaml!")
+            raise ValueError(f"Local file to be read must have extension .yml or .yaml!")
 
 class ValidateLoadDfFromExcel(BaseModel):
     file_path: str
@@ -68,4 +68,4 @@ class ValidateLoadDfFromExcel(BaseModel):
         _file_ext = os.path.splitext(value)[1]
         _file_ext = _file_ext[1:]
         if _file_ext != "xlsx":
-            raise ValidationError(f"Local file to be read must have extension .yml or .yaml!")
+            raise ValueError(f"Local file to be read must have extension .yml or .yaml!")

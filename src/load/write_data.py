@@ -6,7 +6,6 @@ class WriteData(ABC):
     Abstract class for local data reads.
     """
 
-    @RunValidator.validate_instance_method(check="check_file_path_existence")
     def __init__(
             self,
             file_path: str,

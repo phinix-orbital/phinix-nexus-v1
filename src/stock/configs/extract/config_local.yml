@@ -1,3 +1,15 @@
-requirements: data/requirements.csv
+requirements: data/Requirements.xlsx
 parameter_connections: data/parameter_connections.xlsx
 parameter_connections_schema: data/parameter_connections_schema.xlsx
+parameter_x_field: data/parameterXfield.xlsx
+parameter_x_field_schema: data/parameterXfield_schema.xlsx
+parameter_x_formula: data/parameterXformula.xlsx
+parameter_x_formula_schema: data/parameterXformula_schema.xlsx
+parent_x_parameter: data/parentXparameter.xlsx
+parent_x_parameter_schema: data/parentXparameter_schema.xlsx
+requirement_x_parameter: data/requirementXparameter.xlsx
+requirement_x_parameter_schema: data/requirementXparameter_schema.xlsx
+status_x_color: data/statusXcolor.xlsx
+status_x_color_schema: data/statusXcolor_schema.xlsx
+visualizer_parameters: data/visualizer_parameters.xlsx
+visualizer_parameters_schema: data/visualizer_parameters_schema.xlsx

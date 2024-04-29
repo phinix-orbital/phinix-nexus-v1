@@ -1,10 +1,10 @@
 STEP_1:
   component:
-    name: template_v1
+    comp_name: parameter_connections
 
 STEP_2:
   component:
-    name: template_v2
+    comp_name: parameter_x_field
 
 STEP_3:
   dataframes_interaction:
@@ -14,7 +14,6 @@ STEP_3:
       right_df: step_2
       join_type: inner
       join_cols:
-        - id1
-        - id2
-  save_step:
-    save_name: abc.csv
+        - PARXXXXX_id
+    save_step:
+      save_name: test_1.csv

@@ -11,12 +11,6 @@ class ConfigOrchestrator:
     ) -> None:
         self.config = config
         self.config_type = config_type
-    
-    # def orchestrate_component_config(self):
-    #     return OrchestratorHelpers.order_config_steps(config=self.config)
-    
-    # def orchestrate_pipeline_config(self):
-    #     pass
 
     def orchestrate_config(self) -> dict:
         return OrchestratorHelpers.order_config_steps(config=self.config)
