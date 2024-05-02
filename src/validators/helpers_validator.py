@@ -1,8 +1,8 @@
+import great_expectations as ge
 import pandas as pd
+from typing import Self
 
 from pydantic import BaseModel, field_validator, model_validator
-
-from stock.variables import COMPONENT_OPERATIONS
 
 class ValidateRunGeValidation(BaseModel):
     ge_result: dict
@@ -18,27 +18,30 @@ class ValidateRunGeValidation(BaseModel):
 class ValidateCalculateIndex(BaseModel):
     base: str | int | float
     value: str | int | float
-    movement_base: str
     df: pd.DataFrame | None
     new_col_name: str | None
 
     class Config:
         arbitrary_types_allowed = True
-
-    @field_validator("movement_base")
-    def check_movement_base_value(cls, value: str):
-        if value.lower() not in ["from", "to"]:
-            raise ValueError("movement_base can only be set as 'from' or 'to'!")
     
     @model_validator(mode="after")
-    def validate_non_zero_base(
-        cls,
-        field_values: dict,
-    ) -> None:
-        df: pd.DataFrame = field_values.get("df")
-        _base: bool = field_values.get("base")
+    def validate_non_zero_base(self) -> Self:
+        df = self.df
+        _base = self.base
+        _value = self.value
+        _new_col_name = self.new_col_name
         if df is None and _base == 0.:
             raise ZeroDivisionError
+        if df is not None:
+            if isinstance(_base, str) is False or isinstance(_value, str) is False:
+                raise ValueError("args 'base' and 'value' must be column names (type: str) when df is passed!")
+            if _new_col_name is None:
+                raise ValueError("new_col_name arg must be passed when dataframe is passed!")
+            df_ge = ge.from_pandas(df)
+            for _col in [_base, _value]:
+                _ = df_ge.expect_column_to_exist(_col)
+        if isinstance(_base, int | float) is True and isinstance(_value, int | float) is False:
+            raise ValueError("args 'base' and 'value' must be simultaenously numeric or string!")
 
 class ValidateOrderConfigSteps(BaseModel):
     config: dict
