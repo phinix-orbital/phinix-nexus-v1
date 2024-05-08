@@ -1,8 +1,10 @@
 import great_expectations as ge
 import os
 import pandas as pd
+from typing import List, Self
+import warnings
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 from helpers.generic_helpers import GenericHelpers
 from stock.variables import DATAFRAMES_INTERACTION_TYPES
@@ -97,3 +99,26 @@ class ValidateRunDataframesInteraction(BaseModel):
                     _cols.append(list(df.columns))
                 if not GenericHelpers.check_if_all_list_elements_same(check_list=_cols):
                     raise ValueError("All dataframes must have the same columns and same column order if concat_axis is not set!")
+
+class ValidateGenerateTemplate:
+    template_name: str
+    n_files: int
+    extension: str | None
+    list_filenames: List[str] | None
+
+    @model_validator(mode="after")
+    def validate_argparser_args(self) -> Self:
+        n_files = self.n_files
+        _ext = self.extension
+        _fnames = self.list_filenames
+        if n_files<1:
+            raise ValueError("Number of files to generate cannot be less than 1!")
+        if _fnames:
+            if len(_fnames) != n_files:
+                raise ValueError("Number of files arg must be equal to length of file names list!")
+            if sum([len(i) for i in _fnames])<len(_fnames):
+                raise ValueError("Each element of file names list must contain at least 1 character!")
+            if sum([len(i) for i in [os.path.splitext(j)[1] for j in _fnames]]) not in [0, 2*len(_fnames)]:
+                raise ValueError("Either all elements or none of file names list must contain extension!")
+            if _ext:
+                warnings.warn("Both extension and file names list are set; passed extension will overwrite any specified in list!")

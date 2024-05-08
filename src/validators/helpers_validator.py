@@ -53,3 +53,25 @@ class ValidateCheckIfAllListElementsSame(BaseModel):
     def check_list_length(cls, value: list):
         if len(value)<2:
             raise ValueError("Length of passed list to check has to be greater or equal to 2!")
+
+class ValidateGenerateRandomString(BaseModel):
+    size: int
+    seed: int | None
+
+class ValidateGenerateRandomNumber(BaseModel):
+    lower_bound: int
+    upper_bound: int
+    seed:int | None
+
+class ValidateGenerateRandomName(BaseModel):
+    output_dir: str
+    str_length: int | None 
+    int_length: int | None
+    seed:int | None = None
+
+    @model_validator(mode="after")
+    def check_str_int_lengths(self) -> Self:
+        _s = self.str_length
+        _i = self.int_length
+        if _s is None and _i is None:
+            raise ValueError("Both string and int lengths cannot be set as None!")
