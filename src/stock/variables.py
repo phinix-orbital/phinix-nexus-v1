@@ -4,6 +4,7 @@ LOCAL_FILE_PATH_SUFFFIX_LIST = [
     "csv",
     "xlsx",
     "txt",
+    "j2"
 ]
 
 CONFIG_TYPES = [

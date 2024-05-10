@@ -100,9 +100,9 @@ class ValidateRunDataframesInteraction(BaseModel):
                 if not GenericHelpers.check_if_all_list_elements_same(check_list=_cols):
                     raise ValueError("All dataframes must have the same columns and same column order if concat_axis is not set!")
 
-class ValidateGenerateTemplate:
+class ValidateGenerateTemplate(BaseModel):
     template_name: str
-    n_files: int
+    n_files: int | None
     extension: str | None
     list_filenames: List[str] | None
 
@@ -120,5 +120,10 @@ class ValidateGenerateTemplate:
                 raise ValueError("Each element of file names list must contain at least 1 character!")
             if sum([len(i) for i in [os.path.splitext(j)[1] for j in _fnames]]) not in [0, 2*len(_fnames)]:
                 raise ValueError("Either all elements or none of file names list must contain extension!")
-            if _ext:
+            if sum([len(i) for i in [os.path.splitext(j)[1] for j in _fnames]]) == 0 and _ext is None:
+                raise ValueError("Either extension has to be set or must be specified in each element of file name list!")
+            if _ext and sum([len(i) for i in [os.path.splitext(j)[1] for j in _fnames]]) == 2*len(_fnames):
                 warnings.warn("Both extension and file names list are set; passed extension will overwrite any specified in list!")
+        else:
+            if not _ext:
+                raise ValueError("Either extension has to be set or must be specified in each element of file name list!")
