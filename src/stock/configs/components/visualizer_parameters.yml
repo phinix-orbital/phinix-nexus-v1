@@ -1,0 +1,14 @@
+STEP_1:
+  input: visualizer_parameters
+    type: read_local
+    target:
+
+STEP_2:
+  input: visualizer_parameters_schema
+    type: read_local
+    target:
+
+STEP_3:
+  data_validation:
+    calibrate: step_1
+    schema: step_2

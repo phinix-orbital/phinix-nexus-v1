@@ -1,0 +1,14 @@
+STEP_1:
+  input: requirement_x_parameter
+    type: read_local
+    target:
+
+STEP_2:
+  input: requirement_x_parameter_schema
+    type: read_local
+    target:
+
+STEP_3:
+  data_validation:
+    calibrate: step_1
+    schema: step_2
