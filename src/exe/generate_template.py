@@ -20,7 +20,7 @@ class GenerateTemplate:
         parser.add_argument("-n", "--number_of_files", type=int, default=1, help="Number of files to generate from the template.")
         parser.add_argument("-e", "--extension", help="File extension of files generated from the template.")
         parser.add_argument("-l", "--list_filenames", nargs="*", help="Optional argument providing list of filenames to use.")
-        parser.add_argument("-d", "--directory", default="stock/configs/components", help="Default directory within src to store generated templates.")
+        parser.add_argument("-d", "--directory", default="stock\configs\components", help="Default directory within src to store generated templates.")
         args=parser.parse_args()
         return args
     
