@@ -1,12 +1,12 @@
 STEP_1:
-  input: parameter_x_formula
+  input:
     type: read_local
-    target:
+    target: requirementXparameter
 
 STEP_2:
-  input: parameter_x_formula_schema
+  input:
     type: read_local
-    target:
+    target: requirementXparameter_schema
 
 STEP_3:
   data_validation:

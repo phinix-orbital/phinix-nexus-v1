@@ -16,4 +16,8 @@ STEP_3:
       join_cols:
         - PARXXXXX_id
     save_step:
-      save_name: test_1.csv
+      save_name: join_1.csv
+
+STEP_4:
+  component:
+    comp_name: parameter_connections

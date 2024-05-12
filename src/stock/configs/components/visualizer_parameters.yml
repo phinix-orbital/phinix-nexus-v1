@@ -1,12 +1,12 @@
 STEP_1:
-  input: visualizer_parameters
+  input:
     type: read_local
-    target:
+    target: visualizer_parameters
 
 STEP_2:
-  input: visualizer_parameters_schema
+  input:
     type: read_local
-    target:
+    target: visualizer_parameters_schema
 
 STEP_3:
   data_validation:

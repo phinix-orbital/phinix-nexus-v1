@@ -1,12 +1,12 @@
 STEP_1:
-  input: status_x_color
+  input:
     type: read_local
-    target:
+    target: statusXcolor
 
 STEP_2:
-  input: status_x_color_schema
+  input:
     type: read_local
-    target:
+    target: statusXcolor_schema
 
 STEP_3:
   data_validation:
