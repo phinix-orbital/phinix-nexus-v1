@@ -1,12 +1,12 @@
 STEP_1:
   input:
     type: read_local
-    target: requirementXparameter
+    target: requirement_x_parameter
 
 STEP_2:
   input:
     type: read_local
-    target: requirementXparameter_schema
+    target: requirement_x_parameter_schema
 
 STEP_3:
   data_validation:

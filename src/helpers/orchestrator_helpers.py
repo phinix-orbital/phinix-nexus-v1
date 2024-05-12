@@ -11,9 +11,16 @@ class OrchestratorHelpers:
     @classmethod
     @RunValidator.validate_class_method(check="order_config_steps")
     def order_config_steps(cls, config: dict):
-        _steps = sorted(list(config.keys()))
+        _dict_steps = dict()
+        _dict_ordered_steps = dict()
         _new_config = dict()
-        for _step in _steps:
+        for _step in config.keys():
+            _step_num = int(_step.split("_")[1])
+            _dict_steps[_step_num] = _step
+        _ord_steps = sorted(list(_dict_steps.keys()))
+        for s in _ord_steps:
+            _dict_ordered_steps[s] = _dict_steps[s]
+        for _step in _dict_ordered_steps.values():
             _new_config[_step] = config[_step]
         return _new_config
     

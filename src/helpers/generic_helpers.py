@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 import random
 import string
 
@@ -25,7 +25,7 @@ class GenericHelpers:
     
     @classmethod
     def get_time_stamp(cls) -> str:
-        _ts = datetime.now()
+        _ts = datetime.now(UTC)
         return f"{_ts.date()}_{int(_ts.timestamp())}"
     
     @classmethod
