@@ -80,20 +80,4 @@ STEP_11:
       join_cols:
         - PARXXXXX_id
     save_step:
-      save_name: join_5.csv
-
-STEP_12:
-  component:
-    comp_name: visualizer_parameters
-
-STEP_13:
-  dataframes_interaction:
-    type: merge
-    parameters:
-      left_df: step_11
-      right_df: step_12
-      join_type: inner
-      join_cols:
-        - PARXXXXX_id
-    save_step:
       save_name: final_output.csv
