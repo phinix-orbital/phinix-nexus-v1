@@ -21,3 +21,6 @@ class ValidateSavePipelineStepOutput(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+class ValidateXmlGenerator(BaseModel):
+    params: dict

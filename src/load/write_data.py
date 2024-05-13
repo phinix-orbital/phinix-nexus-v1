@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from validators.run_validator import RunValidator
 
 class WriteData(ABC):
     """
