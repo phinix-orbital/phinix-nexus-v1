@@ -71,3 +71,13 @@ STEP_11:
       join_type: left
       join_cols:
         - PARXXXXX_id
+
+STEP_12:
+  fill_na:
+    subset:
+      set_value:
+        "unknown":
+          - FORXXXXX_used
+          - status
+        "#FFB8B8":
+          - fill_color

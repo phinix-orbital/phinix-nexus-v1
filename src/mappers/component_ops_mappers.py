@@ -7,4 +7,5 @@ class ComponentMappersFactory(AbstractMappersFactory):
         return {
             "input": ComponentOperations.run_input,
             "data_validation": ComponentOperations.run_data_validation,
+            "fill_na": ComponentOperations.run_fill_na,
         }

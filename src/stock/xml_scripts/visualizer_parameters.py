@@ -57,7 +57,7 @@ class GenerateVisualizerParameters(XmlGenerator):
             attr: dict,
     ) -> Tuple[Element, Element, Element]:
         _object = SubElement(root, "object", label="%%parameter_name%%", placeholders="1",
-                             placeholders="1", tooltip=VISUALIZER_PARAMETER_XML_PARAMETER_OBJECT_TOOLTIP, 
+                             tooltip=VISUALIZER_PARAMETER_XML_PARAMETER_OBJECT_TOOLTIP, 
                              FORXXXXX_used=attr.get("formula_used"), REQXXXXX_impacted=attr.get("requirements"), 
                              parameter_name=attr.get("parameter_name"), fields=attr.get("fields"), 
                              status=attr.get("status"), id = attr.get("parameter_id"))

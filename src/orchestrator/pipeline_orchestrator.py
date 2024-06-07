@@ -2,12 +2,14 @@ import logging
 
 from helpers.orchestrator_helpers import OrchestratorHelpers
 from mappers.pipeline_ops_mappers import PipelineMappersFactory
+from validators.run_validator import RunValidator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class PipelineOrchestrator:
 
+    @RunValidator.validate_instance_method(check="pipeline_orchestrator")
     def __init__(
             self,
             config: dict,

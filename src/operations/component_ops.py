@@ -32,3 +32,29 @@ class ComponentOperations:
     ) -> None:
         _ = ValidateInputData(calibrate=calibrate, schema=schema).validate_data()
         return calibrate
+    
+    @classmethod
+    @RunValidator.validate_class_method(check="run_fill_na")
+    def run_fill_na(
+        cls,
+        df: pd.DataFrame,
+        fill_na_params: dict,
+    ) -> pd.DataFrame:
+        for _fna_scope, _fna_args in fill_na_params.items():
+            for _ftype, _fval in _fna_args.items():
+                if _fna_scope == "all_cols":
+                    if _ftype == "set_value":
+                        df = df.fillna(_fval)
+                    else:
+                        df = pd.eval(f"df.fillna(df.{_fval}())")
+                elif _fna_scope == "subset":
+                    if _ftype == "set_value":
+                        for _val, _cols in _fval.items():
+                            df[_cols] = df[_cols].fillna(_val)
+                        else:
+                            for _func, _cols in _fval.items():
+                                df[_cols] = pd.eval(f"df[_cols].fillna(df[_cols].{_func}())")
+                else:
+                    for _col_fill, _col_val in _fval.items():
+                        df[_col_fill] = df[_col_fill].fillna(df[_col_val])
+        return df

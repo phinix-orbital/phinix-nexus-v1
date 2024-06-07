@@ -20,6 +20,29 @@ PANDAS_FILTERS = [
     "match in list"
 ]
 
+FILL_NA_SCOPES = [
+    "all_cols",
+    "subset",
+    "other_col",
+]
+
+FILL_NA_FILL_TYPES = [
+    "set_value",
+    "apply_func",
+]
+
+GROUPBY_AGGREGATE_FUNCTIONS = [
+    "count",
+    "sum",
+    "mean",
+    "min",
+    "max",
+    "median",
+    "mode",
+    "std",
+    "var",
+]
+
 COMPONENT_OPERATIONS = [
     "input",
     "data_validation",
@@ -43,11 +66,19 @@ COMPONENT_OPERATION_INPUT_TYPES = [
 PIPELINE_OPERATIONS = [
     "component",
     "dataframes_interaction",
+    "generate_xml",
 ]
 
 DATAFRAMES_INTERACTION_TYPES = [
     "merge",
     "concat",
+]
+
+REPLACE_STEP_COMPONENTS = [
+    "data_validation",
+    "filter_df",
+    "fill_na",
+    "arithmetic",
 ]
 
 VISUALIZER_PARAMETERS_COLUMNS = [

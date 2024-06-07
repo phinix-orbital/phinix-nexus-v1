@@ -6,6 +6,7 @@ from validators import (
     operations_validators, 
     misc_validator, 
     load_validator,
+    orchestrator_validators,
 )
 
 class ValidatorsMapperFactory(AbstractMappersFactory):
@@ -30,8 +31,11 @@ class ValidatorsMapperFactory(AbstractMappersFactory):
             "groupby_and_agg": utils_validator.ValidateGroupbyAndAgg,
             "run_input": operations_validators.ValidateRunInput,
             "run_data_validation": operations_validators.ValidateRunDataValidation,
+            "run_fill_na": operations_validators.ValidateRunFillNa,
             "run_component": operations_validators.ValidateRunComponent,
             "run_dataframes_interaction": operations_validators.ValidateRunDataframesInteraction,
             "input_data_validator": misc_validator.ValidateInputDataValidator,
-            "config_orchestrator": misc_validator.ValidateConfigOrchestrator,
+            "config_orchestrator": orchestrator_validators.ValidateConfigOrchestrator,
+            "component_orchestrator": orchestrator_validators.ValidateComponentOrchestrator,
+            "pipeline_orchestrator": orchestrator_validators.ValidatePipelineOrchestrator
         }

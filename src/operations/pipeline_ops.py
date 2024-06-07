@@ -45,3 +45,10 @@ class PipelineOperations:
                     _extra_args[k] = v
             df = pd.concat(_int_params.get("list_dfs"), **_extra_args)
         return df
+    
+    @classmethod
+    def run_generate_xml(
+        cls,
+        template_name: str,
+    ) -> None:
+        ...

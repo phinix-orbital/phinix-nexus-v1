@@ -7,7 +7,12 @@ import warnings
 from pydantic import BaseModel, field_validator, model_validator
 
 from helpers.generic_helpers import GenericHelpers
-from stock.variables import DATAFRAMES_INTERACTION_TYPES
+from stock.variables import (
+    DATAFRAMES_INTERACTION_TYPES,
+    FILL_NA_FILL_TYPES,
+    FILL_NA_SCOPES,
+    GROUPBY_AGGREGATE_FUNCTIONS,
+)
 from validators.extract_validator import ValidateLocalFilePath
 
 class ValidateRunInput(BaseModel):
@@ -99,6 +104,45 @@ class ValidateRunDataframesInteraction(BaseModel):
                     _cols.append(list(df.columns))
                 if not GenericHelpers.check_if_all_list_elements_same(check_list=_cols):
                     raise ValueError("All dataframes must have the same columns and same column order if concat_axis is not set!")
+
+class ValidateRunFillNa(BaseModel):
+    df: pd.DataFrame
+    fill_na_params: dict
+
+    class Config:
+        arbitrary_types_allowed = True
+    
+    @model_validator(mode="after")
+    def validate_setup(self) -> Self:
+        _data = ge.from_pandas(self.df)
+        _fna_scope = list(self.fill_na_params.keys())
+        if len(_fna_scope) != 1 or _fna_scope[0] not in FILL_NA_SCOPES:
+            raise ValueError(f"Fill na component must contain only 1 key from: {FILL_NA_SCOPES}!")
+        _fna_args: dict = self.fill_na_params.get(_fna_scope[0])
+        if not isinstance(_fna_args, dict):
+            raise ValueError("Fill na scope args must be set as a dictionary!")
+        if _fna_scope[0] == "all_cols":
+            if len(list(_fna_args.keys())) != 1 or list(_fna_args.keys())[0] not in FILL_NA_FILL_TYPES:
+                raise ValueError(f"Scope 'all_cols' must contain only 1 key from {FILL_NA_FILL_TYPES}")
+            _ftype = list(_fna_args.keys())[0]
+            _ffunc = list(_fna_args.values())[0]
+            if _ftype == "apply_func" and _ffunc not in GROUPBY_AGGREGATE_FUNCTIONS:
+                raise ValueError(f"Accepted aggregate functions are: {', '.join(GROUPBY_AGGREGATE_FUNCTIONS)}")
+        elif _fna_scope[0] == "subset":
+            if not set(list(_fna_args.keys())).issubset(set(FILL_NA_FILL_TYPES)):
+                raise ValueError(f"Scope 'subset' must contain keys from {FILL_NA_FILL_TYPES}")
+            for _ftype, _fparams in _fna_args.items():
+                _cols = [i for j in _fparams.values() for i in j]
+                for _col in _cols:
+                    GenericHelpers.run_ge_validation(dict(**_data.expect_column_to_exist(_col)))
+                if _ftype == "apply_func":
+                    _ffunc = list(_fparams.keys())
+                    if not set(_ffunc).issubset(set(GROUPBY_AGGREGATE_FUNCTIONS)):
+                        raise ValueError(f"Accepted functions are: {', '.join(GROUPBY_AGGREGATE_FUNCTIONS)}")
+        else:
+            _cols = list(_fna_args.keys()) + list(_fna_args.values())
+            for _col in _cols:
+                GenericHelpers.run_ge_validation(dict(**_data.expect_column_to_exist(_col)))
 
 class ValidateGenerateTemplate(BaseModel):
     template_name: str
