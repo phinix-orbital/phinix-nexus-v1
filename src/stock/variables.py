@@ -105,15 +105,15 @@ VISUALIZER_PARAMETER_XML_BLOCK_MXCELL_STYLE = ("swimlane;fontStyle=1;align=cente
                                                "autosize=0;resizeHeight=1;treeFolding=0;treeMoving=0;strokeColor=default;"
                                                "fontColor=#ffffff;fontSize=14;spacing=0;metaEdit=1;")
 
-VISUALIZER_PARAMETER_XML_PARAMETER_OBJECT_TOOLTIP = ("ID: %%id%%&#xa;Status: %%status%%&#xa;Fields: %%fields%%&#xa;&#xa;"
-                                                     "Value (if text): %%value_iftext%%&#xa;"
-                                                     "Value (if nominal): %%value_ifnominal%% %%value_units%%&#xa;"
-                                                     "Value min (if range): %%value_ifrange_min%% %%value_units%%&#xa;"
-                                                     "Value max (if range): %%value_ifrange_max%% %%value_units%%&#xa;"
-                                                     "Margin (percentage) : %%value_margin_percentage%% %%&#xa;"
-                                                     "Formulas used: %%FORXXXXX_used%%&#xa;&#xa;"
-                                                     "Requirements impacted: %%REQXXXXX_impacted%%&#xa;&#xa;"
-                                                     "Description: %%description%%")
+VISUALIZER_PARAMETER_XML_PARAMETER_OBJECT_TOOLTIP = ("ID: %id%&#xa;Status: %status%&#xa;Fields: %fields%&#xa;&#xa;"
+                                                     "Value (if text): %value_iftext%&#xa;"
+                                                     "Value (if nominal): %value_ifnominal% %value_units%&#xa;"
+                                                     "Value min (if range): %value_ifrange_min% %value_units%&#xa;"
+                                                     "Value max (if range): %value_ifrange_max% %value_units%&#xa;"
+                                                     "Margin (percentage) : %value_margin_percentage% %&#xa;"
+                                                     "Formulas used: %FORXXXXX_used%&#xa;&#xa;"
+                                                     "Requirements impacted: %REQXXXXX_impacted%&#xa;&#xa;"
+                                                     "Description: %description%")
 
 VISUALIZER_PARAMETER_XML_CONNECTION_MX_CELL_STYLE = ("edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;"
                                                      "html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;"

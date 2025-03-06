@@ -43,12 +43,12 @@ class GenerateVisualizerParameters(XmlGenerator):
             root: Element,
             attr: dict,
     ) -> Tuple[Element, Element, Element]:
-        _object = SubElement(root, "object", label="%%ELEXXXXX_name%%", ELEXXXXX_name=attr.get("element_name"),
+        _object = SubElement(root, "object", label="%ELEXXXXX_name%", ELEXXXXX_name=attr.get("element_name"),
                              placeholders="1", tooltip="", id=attr.get("element_id"))
         _mx_cell = SubElement(_object, "mxCell", style=VISUALIZER_PARAMETER_XML_BLOCK_MXCELL_STYLE, 
                               vertex="1", parent="1")
-        _mx_geo = SubElement(_mx_cell, "mxGeometry", {"as":"geometry"}, x=attr.get("x"), y="0", 
-                             width="150", height="172")
+        _mx_geo = SubElement(_mx_cell, "mxGeometry", {"as":"geometry"}, x=attr.get("ele_x"), y=attr.get("ele_y"), 
+                             width=attr.get("ele_w"), height=attr.get("ele_h"))
         return _object, _mx_cell, _mx_geo
     
     def _get_parameter_elements(
@@ -56,15 +56,20 @@ class GenerateVisualizerParameters(XmlGenerator):
             root: Element,
             attr: dict,
     ) -> Tuple[Element, Element, Element]:
-        _object = SubElement(root, "object", label="%%parameter_name%%", placeholders="1",
+        _object = SubElement(root, "object", label="%parameter_name%", placeholders="1",
                              tooltip=VISUALIZER_PARAMETER_XML_PARAMETER_OBJECT_TOOLTIP, 
                              FORXXXXX_used=attr.get("formula_used"), REQXXXXX_impacted=attr.get("requirements"), 
-                             parameter_name=attr.get("parameter_name"), fields=attr.get("fields"), 
+                             parameter_name=attr.get("parameter_name"), fields=attr.get("fields"),
+                             value_ifnominal=attr.get("value_ifnominal"), value_ifrange_max=attr.get("value_ifrange_max"),
+                             value_ifrange_min=attr.get("value_ifrange_min"), value_iftext=attr.get("value_iftext"),
+                             value_units=attr.get("value_units"), 
+                             value_margin_percentage=attr.get("value_margin_percentage"),
                              status=attr.get("status"), id = attr.get("parameter_id"))
-        _mx_cell = SubElement(_object, "mxCell", style=get_visualizer_parameter_xml_parameter_mx_cell_style(attr.get("fill_colour")), 
+        _mx_cell = SubElement(_object, "mxCell", 
+                              style=get_visualizer_parameter_xml_parameter_mx_cell_style(attr.get("fill_colour")), 
                               vertex="1", parent=attr.get("element_id"))
         _mx_geo = SubElement(_mx_cell, "mxGeometry", {"as":"geometry"}, y=attr.get("y"), 
-                             width="150", height="25")
+                             width=attr.get("par_w"), height="25")
         return _object, _mx_cell, _mx_geo
     
     def _get_connection_elements(
@@ -72,13 +77,17 @@ class GenerateVisualizerParameters(XmlGenerator):
             root: Element,
             attr: dict,
     ) -> Tuple[Element, Element]:
-        _mx_cell = SubElement(root, "mxCell", id=attr.get("line_id"), style=VISUALIZER_PARAMETER_XML_CONNECTION_MX_CELL_STYLE, 
-                              edge="1", parent="1", source=attr.get("start_parameter"), target=attr.get("target_parameter"))
+        _mx_cell = SubElement(root, "mxCell", id=attr.get("line_id"), 
+                              style=VISUALIZER_PARAMETER_XML_CONNECTION_MX_CELL_STYLE, 
+                              edge="1", parent="1", source=attr.get("start_parameter"), 
+                              target=attr.get("target_parameter"))
         _mx_geo = SubElement(_mx_cell, "mxGeometry", {"as":"geometry"}, relative="1")
         return _mx_cell, _mx_geo
 
     def generate_xml(self) -> None:
-        df = self.params
+        df = self.params.copy()
+        # df = df.fillna("unknown")
+        df = df.astype(str)
         _mx_graph_model = self._get_setup()
         _root, _root_cell_0, _root_cell_1 = self._get_root_elements(setup=_mx_graph_model)
         _elements: list = df["ELEXXXXX_id"].unique().tolist()
@@ -86,24 +95,30 @@ class GenerateVisualizerParameters(XmlGenerator):
             _block_attr = {
                 "element_id": _elem,
                 "element_name": df[df["ELEXXXXX_id"] == _elem]["ELEXXXXX_name"].unique().tolist()[0],
-                "x": df[df["ELEXXXXX_id"] == _elem]["x"].unique().tolist()[0],
+                "ele_x": df[df["ELEXXXXX_id"] == _elem]["ELE_x"].unique().tolist()[0],
+                "ele_y": df[df["ELEXXXXX_id"] == _elem]["ELE_y"].unique().tolist()[0],
+                "ele_h": df[df["ELEXXXXX_id"] == _elem]["ELE_height"].unique().tolist()[0],
+                "ele_w": df[df["ELEXXXXX_id"] == _elem]["PAR_width"].unique().tolist()[0],
             }
             _block_object, _block_cell, _block_geo = self._get_block_elements(root=_root, attr=_block_attr)
             _parameter_ids: list = df[df["ELEXXXXX_id"] == _elem]["PARXXXXX_id"].tolist()
             _parameter_names: list = df[df["ELEXXXXX_id"] == _elem]["PARXXXXX_name"].tolist()
+            _parameter_widths: list = df[df["ELEXXXXX_id"] == _elem]["PAR_width"].tolist()
             _formulas_used: list = df[df["ELEXXXXX_id"] == _elem]["FORXXXXX_used"].tolist()
             _requirements: list = df[df["ELEXXXXX_id"] == _elem]["REQXXXXX_impacted"].tolist()
             _fields: list = df[df["ELEXXXXX_id"] == _elem]["fields"].tolist()
-            _statuses: list = df[df["ELEXXXXX_id"] == _elem]["fields"].tolist()
+            _statuses: list = df[df["ELEXXXXX_id"] == _elem]["status"].tolist()
             _fcolours: list = df[df["ELEXXXXX_id"] == _elem]["fill_color"].tolist()
-            _ycoords: list = df[df["ELEXXXXX_id"] == _elem]["y"].tolist()
-            for _pid, _pname, _form, _req, _fld, _st, _fcolour, _y in zip(_parameter_ids, _parameter_names, 
-                                                            _formulas_used, _requirements, 
-                                                            _fields, _statuses, _fcolours,
-                                                            _ycoords):
+            _ycoords: list = df[df["ELEXXXXX_id"] == _elem]["PAR_y"].tolist()
+            for _pid, _pname, _pw, _form, _req, _fld, _st, _fcolour, _y in zip(_parameter_ids, 
+                                                                                _parameter_names, _parameter_widths,
+                                                                                _formulas_used, _requirements, 
+                                                                                _fields, _statuses, _fcolours,
+                                                                                _ycoords):
                 _parameter_attributes = {
                     "parameter_id": _pid,
                     "parameter_name": _pname,
+                    "par_w": _pw,
                     "formula_used": _form,
                     "requirements": _req,
                     "fields": _fld,
@@ -112,9 +127,11 @@ class GenerateVisualizerParameters(XmlGenerator):
                     "element_id": _elem,
                     "y": _y,
                 }
-                _param_object, _param_cell, _param_geo = self._get_parameter_elements(root=_block_object, 
+                _param_object, _param_cell, _param_geo = self._get_parameter_elements(root=_root, 
                                                                 attr=_parameter_attributes)
-        _lines: list = df[~df["line_XXXXX_id"].isna()].unique().tolist()
+                # _param_object, _param_cell, _param_geo = self._get_parameter_elements(root=_block_object, 
+                #                                                 attr=_parameter_attributes)
+        _lines: list = df[~df["line_XXXXX_id"].isna()]["line_XXXXX_id"].unique().tolist()
         for _lid in _lines:
             _line_attr = {
                 "line_id": _lid,

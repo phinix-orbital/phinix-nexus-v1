@@ -1,5 +1,5 @@
 import logging
-from xml.etree.ElementTree import ElementTree
+from xml.etree.ElementTree import ElementTree, tostring
 
 from load.write_data import WriteData
 from validators.run_validator import RunValidator
@@ -23,6 +23,5 @@ class WriteXml(WriteData):
             self,
             output: ElementTree,
     ) -> None:
-        with open(self.file_path, "wb") as f:
-            f.write(output)
+        output.write(self.file_path)
         logger.info(f"File saved successfully at path: {self.file_path}")

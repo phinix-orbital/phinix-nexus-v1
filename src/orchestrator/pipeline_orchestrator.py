@@ -45,6 +45,7 @@ class PipelineOrchestrator:
                 _params = {"interaction_config": _op_params}
             _op_run = _op_func(**_params)
             _step_outputs[_step.lower()] = _op_run
+            # print(_op_run)
             if "save_step" in _op_params.keys():
                 if "save_name" not in _op_params.get("save_step"):
                     raise ValueError("'save_step' must contain 'save_name' as the key!")

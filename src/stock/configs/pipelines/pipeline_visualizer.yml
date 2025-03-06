@@ -12,7 +12,7 @@ STEP_3:
     parameters:
       left_df: step_1
       right_df: step_2
-      join_type: inner
+      join_type: left
       join_cols:
         - PARXXXXX_id
 
@@ -26,9 +26,11 @@ STEP_5:
     parameters:
       left_df: step_3
       right_df: step_4
-      join_type: inner
+      join_type: left
       join_cols:
         - PARXXXXX_id
+    save_step:
+      save_name: abc_test_save.csv
 
 STEP_6:
   component:
@@ -73,11 +75,43 @@ STEP_11:
         - PARXXXXX_id
 
 STEP_12:
-  fill_na:
-    subset:
-      set_value:
-        "unknown":
-          - FORXXXXX_used
-          - status
-        "#FFB8B8":
-          - fill_color
+  component:
+    comp_name: parameter_x_values
+
+STEP_13:
+  dataframes_interaction:
+    type: merge
+    parameters:
+      left_df: step_11
+      right_df: step_12
+      join_type: left
+      join_cols:
+        - PARXXXXX_id
+
+STEP_14:
+  component:
+    comp_name: parameter_x_description
+
+STEP_15:
+  dataframes_interaction:
+    type: merge
+    parameters:
+      left_df: step_13
+      right_df: step_14
+      join_type: left
+      join_cols:
+        - PARXXXXX_id
+
+# STEP_12:
+#   fill_na:
+#     subset:
+#       set_value:
+#         "unknown":
+#           - FORXXXXX_used
+#           - status
+#         "#FFB8B8":
+#           - fill_color
+
+# STEP_13:
+#   generate_xml:
+#     target: visualizer_parameters
